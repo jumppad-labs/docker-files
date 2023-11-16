@@ -24,6 +24,6 @@ jobs:
           echo $KUBERNETES_VERSION
           echo $CURRENT_VERSION
       - name: Build image
-        if: needs.build.outputs.version != needs.setup.outputs.current
+        if: needs.build.outputs.version != needs.build.outputs.current
         run: |-
           echo "Building image"
