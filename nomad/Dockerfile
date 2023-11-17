@@ -1,3 +1,0 @@
-ARG NOMAD_VERSION=1.6.3
-
-FROM hashicorp/nomad:${NOMAD_VERSION} AS base

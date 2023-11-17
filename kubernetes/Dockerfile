@@ -1,6 +1,6 @@
-ARG K8S_VERSION=v1.27.4
+ARG KUBERNETES_VERSION=v1.27.4
 
-FROM rancher/k3s:${K8S_VERSION}-k3s1 AS base
+FROM rancher/k3s:${KUBERNETES_VERSION}-k3s1 AS base
 
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x ./entrypoint.sh
