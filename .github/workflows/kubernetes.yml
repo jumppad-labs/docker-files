@@ -26,14 +26,14 @@ jobs:
               jq -r '.results[]["name"] |  sub("(?<version>[0-9]+\\.[0-9]+\\.[0-9]+).*";.version)' | \
               sort -V -r | \
               head -n 1)
-          fi
-          CURRENT_VERSION=$(curl --silent --fail -L \
+            CURRENT_VERSION=$(curl --silent --fail -L \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/orgs/jumppad-labs/packages/container/kubernetes/versions" | \
             jq -r '.[].metadata.container.tags[] | select( . != null )' | \
             head -n 1)
+          fi
 
           echo "version=$KUBERNETES_VERSION" >> "$GITHUB_OUTPUT"
           echo "current=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
