@@ -1,6 +1,5 @@
 name: Docker-in-Docker
 on:
-  push:
   workflow_dispatch:
     inputs:
       version:
