@@ -19,13 +19,26 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/orgs/jumppad-labs/packages/docker/kubernetes/versions | jq -r '.[]["name"]'| head -n 1)
 
-          # CURRENT_VERSION="v0.0.0"
           echo "version=$KUBERNETES_VERSION" >> "$GITHUB_OUTPUT"
           echo "current=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
 
           echo $KUBERNETES_VERSION
           echo $CURRENT_VERSION
-      - name: Build image
+
+      - name: Setup Docker Multi-Arch Builder
         if: steps.collect.outputs.version != steps.collect.outputs.current
-        run: |-
-          echo "Building image"
+        run: |
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+          docker buildx create --name multi
+          docker buildx use multi
+          docker buildx inspect --bootstrap
+
+      - name: Build and load into local Docker
+        if: steps.collect.outputs.version != steps.collect.outputs.current
+        run: |
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            -t jumppad-labs/kubernetes:${KUBERNETES_VERSION} \
+            -f kubernetes/Dockerfile \
+            kubernetes \
+            --load
