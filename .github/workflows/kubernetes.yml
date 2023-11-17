@@ -38,7 +38,7 @@ jobs:
         run: |
           docker buildx build \
             --platform linux/amd64,linux/arm64 \
-            -t jumppad-labs/kubernetes:${KUBERNETES_VERSION} \
+            -t ghcr.io/jumppad-labs/kubernetes:${steps.collect.outputs.version} \
             -f kubernetes/Dockerfile \
             kubernetes \
             --load
