@@ -2,7 +2,7 @@ ARG KUBERNETES_VERSION=v1.27.4
 
 FROM rancher/k3s:${KUBERNETES_VERSION}-k3s1 AS base
 
-COPY ./entrypoint.sh /entrypoint.sh
+COPY files/entrypoint.sh /entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
 ENV PATH="$PATH:/bin/aux"
