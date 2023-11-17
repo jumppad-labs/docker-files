@@ -41,4 +41,4 @@ jobs:
             -t ghcr.io/jumppad-labs/kubernetes:${{steps.collect.outputs.version}} \
             -f kubernetes/Dockerfile \
             kubernetes \
-            --load
+            --push
