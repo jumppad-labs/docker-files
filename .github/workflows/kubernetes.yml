@@ -25,6 +25,14 @@ jobs:
           echo $KUBERNETES_VERSION
           echo $CURRENT_VERSION
 
+      - name: Login to GitHub Container Registry
+        if: steps.collect.outputs.version != steps.collect.outputs.current
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup Docker Multi-Arch Builder
         if: steps.collect.outputs.version != steps.collect.outputs.current
         run: |
