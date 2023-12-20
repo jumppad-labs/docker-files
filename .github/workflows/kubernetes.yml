@@ -24,9 +24,9 @@ jobs:
           # Get latest Kubernetes version
           KUBERNETES_VERSION=${{inputs.version}}
           if [ -z "$KUBERNETES_VERSION" ]; then
-            KUBERNETES_VERSION=$(curl -s https://registry.hub.docker.com/v2/repositories/rancher/k3s/tags\?name\=k3s1  | \
-              jq -r '.results[]["name"] | select(contains("-rc") | not) |  sub("(?<version>[0-9]+\\.[0-9]+\\.[0-9]+).*";.version)' | \
-              sort -V -r | \
+            KUBERNETES_VERSION=$(curl -s https://registry.hub.docker.com/v2/repositories/rancher/k3s/tags\?name\=k3s1\&page_size\=50 | \
+              jq -r '.results[].name | select(contains("-rc") | not) | select(endswith("k3s1")) | sub("(?<version>[0-9]+\\.[0-9]+\\.[0-9]+).*";.version)' | \
+              sort -r | \
               head -n 1)
             CURRENT_VERSION=$(curl --silent --fail -L \
             -H "Accept: application/vnd.github+json" \
@@ -34,7 +34,7 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/orgs/jumppad-labs/packages/container/kubernetes/versions" | \
             jq -r '.[].metadata.container.tags[] | select( . != null )' | \
-            sort -V -r | \
+            sort -r | \
             head -n 1)
           fi
 
