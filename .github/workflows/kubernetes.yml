@@ -25,7 +25,7 @@ jobs:
           KUBERNETES_VERSION=${{inputs.version}}
           if [ -z "$KUBERNETES_VERSION" ]; then
             KUBERNETES_VERSION=$(curl -s https://registry.hub.docker.com/v2/repositories/rancher/k3s/tags\?name\=k3s1  | \
-              jq -r '.results[]["name"] |  sub("(?<version>[0-9]+\\.[0-9]+\\.[0-9]+).*";.version)' | \
+              jq -r '.results[]["name"] | select(contains("-rc") | not) |  sub("(?<version>[0-9]+\\.[0-9]+\\.[0-9]+).*";.version)' | \
               sort -V -r | \
               head -n 1)
             CURRENT_VERSION=$(curl --silent --fail -L \
