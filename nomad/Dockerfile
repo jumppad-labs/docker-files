@@ -69,6 +69,8 @@ RUN set -eux; \
   tar -xf /tmp/openjdk.tar.gz --strip-components=1; \
   rm -rf /tmp/openjdk.tar.gz;
 
+ENV JAVA_HOME=/usr/lib/jvm/openjdk PATH="/usr/lib/jvm/openjdk/bin:$PATH"
+
 # Create the Nomad directory
 RUN mkdir -p /var/lib/nomad
 
