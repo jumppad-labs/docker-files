@@ -30,6 +30,7 @@ RUN apt-get update && \
   qemu-system-x86 \
   udhcpd \
   iproute2 \
+  git \
   fuse-overlayfs && \
   apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -74,7 +75,7 @@ ENV JAVA_HOME=/usr/lib/jvm/openjdk PATH="/usr/lib/jvm/openjdk/bin:$PATH"
 # Create the Nomad directory
 RUN mkdir -p /var/lib/nomad
 
-COPY files/server.hcl /etc/nomad.d/server.hcl
+COPY files/config.hcl /etc/nomad.d/config.hcl
 COPY --chmod=0755 files/nomad.sh /usr/local/bin/nomad.sh
 
 COPY files/nomad.conf /etc/supervisor/conf.d/nomad.conf
