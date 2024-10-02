@@ -10,4 +10,12 @@ else
   update-ca-certificates
 fi
 
-exec /usr/bin/nomad agent -config /etc/nomad.d -log-level=DEBUG
+# Start the docker daemon
+/usr/local/bin/dockerd.sh &
+
+# Start the nomad agent
+/usr/bin/nomad agent -config /etc/nomad.d -log-level=DEBUG &
+
+wait -n
+
+exit $?

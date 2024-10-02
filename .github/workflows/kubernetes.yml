@@ -70,3 +70,12 @@ jobs:
             KUBERNETES_VERSION=${{steps.collect.outputs.version}}
           push: true
           tags: ghcr.io/jumppad-labs/kubernetes:${{steps.collect.outputs.version}}
+
+      - name: Test built image
+        if: steps.collect.outputs.version != steps.collect.outputs.current
+        run: |-
+          # Install Jumppad
+          curl https://jumppad.dev/install | bash
+
+          # Test the image
+          jumppad test --tags @Single --var version=${{steps.collect.outputs.version}} ./kubernetes/tests 
