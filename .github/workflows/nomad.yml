@@ -100,7 +100,7 @@ jobs:
             NOMAD_VERSION=${{steps.nomad.outputs.nomad}}
             CONSUL_VERSION=${{steps.consul.outputs.consul}}
           push: true
-          tags: ghcr.io/jumppad-labs/nomad:${{steps.collect.outputs.nomad}}
+          tags: ghcr.io/jumppad-labs/nomad-consul:${{steps.collect.outputs.nomad}}
 
       - name: Test built image
         if: steps.collect.outputs.nomad != steps.collect.outputs.current
