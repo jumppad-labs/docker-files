@@ -88,7 +88,7 @@ jobs:
           build-args: |
             NOMAD_VERSION=${{steps.nomad.outputs.value}}
           push: true
-          tags: ghcr.io/jumppad-labs/nomad:${{steps.collect.outputs.version}}
+          tags: ghcr.io/jumppad-labs/nomad:${{steps.collect.outputs.nomad}}
       
       - name: Build and push Docker image Nomad and Consul
         if: steps.collect.outputs.nomad != steps.collect.outputs.current
