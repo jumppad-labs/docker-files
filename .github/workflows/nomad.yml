@@ -101,6 +101,7 @@ jobs:
           build-args: |
             NOMAD_VERSION=${{steps.nomad.outputs.value}}
             CONSUL_VERSION=${{steps.consul.outputs.value}}
+          file: nomad/Dockerfile_Consul
           push: true
           tags: ghcr.io/jumppad-labs/nomad-consul:${{steps.collect.outputs.nomad}}
 
