@@ -21,10 +21,13 @@ jobs:
       - name: Get Nomad and Consul version
         id: collect
         run: |-
-          # Get latest Nomad version
+          # Get latest Nomad version from inputs
           NOMAD_VERSION=${{inputs.version}}
+
+          # if no version is provided, get the latest version from github
           if [ -z "$NOMAD_VERSION" ]; then
             NOMAD_VERSION=$(curl --silent "https://api.github.com/repos/hashicorp/nomad/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          
             CURRENT_VERSION=$(curl --silent --fail -L \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
@@ -34,22 +37,21 @@ jobs:
             sort -V -r | \
             head -n 1)
           fi
-
-          echo "nomad=$NOMAD_VERSION" >> "$GITHUB_OUTPUT"
-          echo "current=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
           
           # Get latest Consul version
           CONSUL_VERSION=$(curl --silent "https://api.github.com/repos/hashicorp/consul/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
           echo "consul=$CONSUL_VERSION" >> "$GITHUB_OUTPUT"
+          echo "nomad=$NOMAD_VERSION" >> "$GITHUB_OUTPUT"
+          echo "current=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
 
-          echo $NOMAD_VERSION
-          echo $CONSUL_VERSION
-          echo $CURRENT_VERSION
+          echo "Nomad version: $NOMAD_VERSION"
+          echo "Current package version: $CURRENT_VERSION"
+          echo "Consul version: $CONSUL_VERSION"
 
       - name: Remove v in Tag Nomad
         id: nomad
-        uses: ashley-taylor/regex-property-action@v1.0
+        uses: ashley-taylor/regex-property-action@v1.3
         with:
           value: ${{steps.collect.outputs.nomad}}
           regex: "v"
@@ -57,7 +59,7 @@ jobs:
       
       - name: Remove v in Tag Consul
         id: consul
-        uses: ashley-taylor/regex-property-action@v1.0
+        uses: ashley-taylor/regex-property-action@v1.3
         with:
           value: ${{steps.collect.outputs.consul}}
           regex: "v"
@@ -97,8 +99,8 @@ jobs:
           context: nomad
           platforms: linux/amd64,linux/arm64
           build-args: |
-            NOMAD_VERSION=${{steps.nomad.outputs.nomad}}
-            CONSUL_VERSION=${{steps.consul.outputs.consul}}
+            NOMAD_VERSION=${{steps.nomad.outputs.value}}
+            CONSUL_VERSION=${{steps.consul.outputs.value}}
           push: true
           tags: ghcr.io/jumppad-labs/nomad-consul:${{steps.collect.outputs.nomad}}
 
