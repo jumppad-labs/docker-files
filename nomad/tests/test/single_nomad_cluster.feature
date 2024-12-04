@@ -29,3 +29,7 @@ Feature: Nomad Cluster
     | v1.8.2           |
     | v1.8.3           |
     | v1.8.4           |
+    | v1.9.3           |
+    | v1.9.3-consul    |
+    | v1.9.3-java      |
+    | v1.9.3-qemu      |

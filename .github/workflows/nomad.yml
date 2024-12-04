@@ -92,6 +92,32 @@ jobs:
           push: true
           tags: ghcr.io/jumppad-labs/nomad:${{steps.collect.outputs.nomad}}
       
+      - name: Build and push Docker image Nomad and Java
+        if: steps.collect.outputs.nomad != steps.collect.outputs.current
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: nomad
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            NOMAD_VERSION=${{steps.nomad.outputs.value}}
+            CONSUL_VERSION=${{steps.consul.outputs.value}}
+          file: nomad/Dockerfile_Java
+          push: true
+          tags: ghcr.io/jumppad-labs/nomad-consul:${{steps.collect.outputs.nomad}}
+      
+      - name: Build and push Docker image Nomad and Qemu
+        if: steps.collect.outputs.nomad != steps.collect.outputs.current
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: nomad
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            NOMAD_VERSION=${{steps.nomad.outputs.value}}
+            CONSUL_VERSION=${{steps.consul.outputs.value}}
+          file: nomad/Dockerfile_qemu
+          push: true
+          tags: ghcr.io/jumppad-labs/nomad-consul:${{steps.collect.outputs.nomad}}
+      
       - name: Build and push Docker image Nomad and Consul
         if: steps.collect.outputs.nomad != steps.collect.outputs.current
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc

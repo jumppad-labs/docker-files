@@ -1,5 +1,5 @@
 variable "version" {
-  default = "v1.8.0"
+  default = "v1.9.3"
 }
 
 resource "network" "cloud" {
@@ -8,6 +8,10 @@ resource "network" "cloud" {
 
 resource "nomad_cluster" "dev" {
   client_nodes = 3
+
+  image {
+    name = "ghcr.io/jumppad-labs/nomad:${variable.version}"
+  }
 
   network {
     id = resource.network.cloud.meta.id
