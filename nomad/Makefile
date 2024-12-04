@@ -31,4 +31,12 @@ build_qemu: build_main
 		-f ./Dockerfile_qemu \
 		.
 
-build_all: build_main build_consul build_java build_qemu
+build_all: build_main
+	docker build \
+		-t ${REPO}:v${NOMAD_VERSION}-all \
+		--build-arg NOMAD_VERSION=${NOMAD_VERSION} \
+		--build-arg CONSUL_VERSION=${CONSUL_VERSION} \
+		-f ./Dockerfile_all \
+		.
+
+build: build_main build_consul build_java build_qemu build_all
